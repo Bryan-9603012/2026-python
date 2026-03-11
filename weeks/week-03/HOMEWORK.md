@@ -24,6 +24,8 @@
 weeks/week-03/solutions/<student-id>/
 ├── robot_game.py                 # pygame 主程式（互動畫面）
 ├── robot_core.py                 # 核心邏輯（不依賴 pygame，便於測試）
+├── assets/
+│   └── gameplay.png              # 你實際操作遊戲的截圖（必交）
 ├── tests/
 │   ├── test_robot_core.py
 │   └── test_robot_scent.py
@@ -102,6 +104,12 @@ weeks/week-03/solutions/<student-id>/
 - `C`：清除 scent
 - `ESC`：離開
 
+### 遊玩證明截圖（必交）
+
+- 請在 `assets/gameplay.png` 放入你實際遊玩畫面截圖
+- 截圖中需同時看得到：地圖、機器人、scent 或狀態資訊（HUD）
+- 建議在 README 內嵌圖片：`![gameplay](assets/gameplay.png)`
+
 ---
 
 ## Test-Oriented Development（本作業必做）
@@ -169,6 +177,7 @@ python -m unittest discover -s tests -p "test_*.py" -v
 3. 測試方式（測試指令與結果摘要）
 4. 你的資料結構選擇理由（至少 3 點）
 5. 你踩到的一個 bug 與修正方式
+6. 內嵌遊玩截圖（`assets/gameplay.png`）
 
 ---
 
@@ -215,6 +224,7 @@ python -m unittest discover -s tests -p "test_*.py" -v
 - 測試函式少於 10 個：-10 分
 - 缺 `TEST_LOG.md`：-10 分
 - 缺 `AI_USAGE.md`：-10 分
+- 缺 `assets/gameplay.png` 或 README 未內嵌截圖：-10 分
 - 無法執行（程式或測試）：-10 分
 - `robot_core.py` 與畫面邏輯高度耦合、難以測試：-10 分
 
