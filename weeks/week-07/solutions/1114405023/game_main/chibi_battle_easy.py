@@ -1,7 +1,19 @@
 from collections import Counter, defaultdict, namedtuple
 from pathlib import Path
+import unicodedata
 
 General = namedtuple("General", ["faction", "name", "hp", "atk", "def_", "spd", "is_leader"])
+
+
+def display_width(text):
+    width = 0
+    for ch in text:
+        width += 2 if unicodedata.east_asian_width(ch) in {"W", "F"} else 1
+    return width
+
+
+def ljust_display(text, width):
+    return text + " " * max(0, width - display_width(text))
 
 
 class ChibiBattleEasy:
@@ -54,5 +66,5 @@ if __name__ == "__main__":
     game = ChibiBattleEasy()
     game.load_generals(str(base / "generals.txt"))
     game.simulate_battle()
-    for name, dmg in game.get_damage_ranking():
-        print(name, dmg)
+    for idx, (name, dmg) in enumerate(game.get_damage_ranking(), start=1):
+        print(f"{ljust_display(str(idx) + '. ' + name, 10)} {dmg:3} HP")
