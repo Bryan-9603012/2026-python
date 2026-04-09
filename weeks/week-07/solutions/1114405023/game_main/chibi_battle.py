@@ -84,16 +84,42 @@ class ChibiBattle:
         self.stats["losses"][defender_name] += damage
         return damage
 
+    def is_alive(self, general_name: str) -> bool:
+        return self.stats["losses"][general_name] < self.generals[general_name].hp
+
+    def get_alive_generals(self, factions: List[str] | None = None) -> List[General]:
+        alive = [g for g in self.generals.values() if self.is_alive(g.name)]
+        if factions is not None:
+            alive = [g for g in alive if g.faction in factions]
+        return sorted(alive, key=lambda g: (-g.spd, g.name))
+
+    def choose_target(self, attacker: General) -> General | None:
+        if attacker.faction == "魏":
+            enemies = self.get_alive_generals(["蜀", "吳"])
+        else:
+            enemies = self.get_alive_generals(["魏"])
+        if not enemies:
+            return None
+        return min(
+            enemies,
+            key=lambda g: (
+                self.stats["losses"][g.name] / g.hp,
+                g.hp - self.stats["losses"][g.name],
+                g.name,
+            ),
+        )
+
     def simulate_wave(self, wave_num: int) -> List[Tuple[str, str, int]]:
         logs: List[Tuple[str, str, int]] = []
-        shu_attackers = self.get_generals_by_faction("蜀")[:wave_num]
-        wu_attackers = self.get_generals_by_faction("吳")[:wave_num]
-        wei_targets = self.get_generals_by_faction("魏")
-        attackers = shu_attackers + wu_attackers
-        for i, attacker in enumerate(attackers):
-            if not wei_targets:
+        active_count = min(len(self.generals), wave_num * 3)
+        turn_order = self.get_battle_order()[:active_count]
+
+        for attacker in turn_order:
+            if not self.is_alive(attacker.name):
+                continue
+            target = self.choose_target(attacker)
+            if target is None:
                 break
-            target = wei_targets[i % len(wei_targets)]
             damage = self.calculate_damage(attacker.name, target.name)
             logs.append((attacker.name, target.name, damage))
         return logs
