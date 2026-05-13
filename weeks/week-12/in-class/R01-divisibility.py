@@ -22,15 +22,20 @@ for n in ["9", "18", "99", "999", "100", "12345"]:
 def nine_degree(s: str) -> tuple[bool, int]:
     """
     回傳 (是否為 9 的倍數, 9-degree)
-    9-degree：反覆加總到個位數，需要做幾次
+    9-degree：依 UVA 10922 定義，若數字本身就是 9，degree 為 1；
+    否則反覆做位數和，直到得到個位數 9 為止，並計算層數。
     """
     current = s
+    if current == "9":
+        return True, 1
+
     degree = 0
     while len(current) > 1:
         current = str(digit_sum(current))
         degree += 1
-    if current == "9":
-        return True, degree
+        if current == "9":
+            return True, degree + 1
+
     return False, -1
 
 print("\n=== UVA 10922 輸出格式 ===")
