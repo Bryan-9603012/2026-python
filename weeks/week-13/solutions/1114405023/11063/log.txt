@@ -1,0 +1,17 @@
+=== Testing main.py ===
+
+--- Test 1: 2x2 image with pure colors ---
+PASS
+
+--- Test 2: 1x1 image (single pixel black) ---
+PASS
+
+=== Testing main_simple.py ===
+
+--- Test 1: 2x2 image with pure colors ---
+PASS
+
+--- Test 2: 1x1 image (single pixel black) ---
+PASS
+
+Overall: ALL PASS
