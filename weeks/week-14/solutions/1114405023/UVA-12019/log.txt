@@ -1,0 +1,7 @@
+Problem: UVA 12019
+Test time: 2026-05-27T02:24:50+00:00
+Command: python test.py
+Return code: 0
+
+OUTPUT:
+All tests passed.
