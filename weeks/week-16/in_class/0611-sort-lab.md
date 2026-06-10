@@ -21,8 +21,17 @@
 | 3 | 加速版排序(Cython 或演算法優化) | `test: stage3 加速版共用正確性測試` | `feat: stage3 加速版與量測數據` |
 | 4 | `plot.py` + `assets/benchmark.png` | `test: stage4 繪圖輸出測試` | `feat: stage4 實驗結果圖表與報告` |
 
+### 每個階段都跑同一個 TDD 循環
+
+| # | 步驟 | 做什麼 | 產出 |
+|---|------|--------|------|
+| 1 | **Read spec** | 讀該階段規格,確認函式簽名、行為、例外、驗收標準;不清楚的先問 AI 問清楚 | 你知道「做完長什麼樣」 |
+| 2 | **Dev for red** | 寫測試(AI 給的自己驗收),`python -m unittest` **全紅** | commit `test: stageN ...` |
+| 3 | **Dev for green** | 寫實作,跑到**全綠** | commit `feat: stageN ...` |
+| 4 | **Commit to branch** | push 到 `feature/wk16-0611-<學號>`,才進入下一階段 | 遠端有紀錄 |
+
 `git log --reverse` 必須能看到 **test → feat 交替出現八次**(可穿插 `refactor:`)。
-任何一個階段「一開始就綠」或「先 feat 後 test」,該階段流程分 0 分。
+任何一個階段「一開始就綠」、「先 feat 後 test」或「跳過 Read spec 直接叫 AI 全包」,該階段流程分 0 分。
 
 ---
 
@@ -96,7 +105,8 @@ def plot_results(results: dict, out_path: str) -> None: ...
 
 ## 課堂節奏(90 分鐘,四階段全部課堂內完成)
 
-全程 AI 協作,沒有課後補交——**下課前 PR 要含全部四個階段**。
+全程 AI 協作,目標**下課前 PR 含全部四個階段**。
+來不及的部分可課後補交,但**該階段分數打 8 折**(細則見評分表下方)。
 
 | 時間 | 內容 | 計時目標 |
 |------|------|---------|
@@ -133,6 +143,9 @@ weeks/week-16/solutions/<學號>/0611/
 | Stage 4 圖表正確 + 解讀合理 | 10 |
 | Code Style(命名、繁中註解、無重複測試碼) | 20 |
 | 報告與紀錄(README / AI_LOG / TEST_LOG / commit 順序) | 20 |
+
+> **課後補交細則**:以 commit 時間為準——下課前綠燈的階段以 100% 計;
+> 下課後才綠燈的階段,**該階段配分 × 0.8**。補交收到 **6/17(三)23:59** 為止,之後不計分。
 
 ---
 
