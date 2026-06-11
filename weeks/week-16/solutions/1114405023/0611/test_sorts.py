@@ -1,7 +1,13 @@
 # test_sorts.py
 import unittest
 
-from sorts import bubble_sort, quick_sort, merge_sort
+from sorts import (
+    bubble_sort,
+    quick_sort,
+    merge_sort,
+    builtin_sorted,
+    optimized_quick_sort,
+)
 
 
 class TestSortingAlgorithms(unittest.TestCase):
@@ -10,6 +16,8 @@ class TestSortingAlgorithms(unittest.TestCase):
             bubble_sort,
             quick_sort,
             merge_sort,
+            builtin_sorted,
+            optimized_quick_sort,
         ]
 
     def test_sort_normal_integer_list(self):
