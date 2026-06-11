@@ -13,6 +13,12 @@ from sorts import (
 
 
 def make_data(n: int, seed: int = 42) -> list:
+    if not isinstance(n, int):
+        raise TypeError("n must be an integer")
+
+    if n < 0:
+        raise ValueError("n must be greater than or equal to 0")
+
     rng = random.Random(seed)
     return [rng.randint(0, n * 10) for _ in range(n)]
 
@@ -33,6 +39,12 @@ def measure_time(sort_func, data: list, repeats: int = 3) -> float:
 
 
 def run_benchmark(sizes=(500, 1000, 2000, 4000), repeats=3) -> dict:
+    if not isinstance(repeats, int):
+        raise TypeError("repeats must be an integer")
+
+    if repeats <= 0:
+        raise ValueError("repeats must be greater than 0")
+    
     sort_functions = {
         "bubble_sort": bubble_sort,
         "quick_sort": quick_sort,
