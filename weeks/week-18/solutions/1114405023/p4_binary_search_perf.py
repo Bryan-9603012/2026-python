@@ -7,21 +7,14 @@
 - 測試資料使用升冪陣列
 - 比較 linear search 與 binary search 的比較次數與搜尋時間
 - 分別測 best、middle、worst、not_found 四種情境
+- 使用 Python 標準庫 timeit 量測搜尋時間
 - 執行主程式時會自動產生 assets/radar.png
-
-設計重點：
-1. 資料先建立好，不把建立資料算進搜尋時間。
-2. 搜尋函式找到目標後立刻 return。
-3. benchmark 只量搜尋函式本身。
-4. binary search 的前提是資料已排序。
 """
 
 import math
 import sys
+import timeit as timeit_module
 from pathlib import Path
-from time import perf_counter
-
-
 
 DATA_SIZE = 100000
 K = 123
@@ -30,14 +23,6 @@ K = 123
 def make_test_data_with_target_at(target_index, size=DATA_SIZE, target=K):
     """
     建立升冪測試資料，並讓 target 出現在指定 index。
-
-    Args:
-        target_index: 目標值要出現的位置。
-        size: 陣列長度。
-        target: 搜尋目標。
-
-    Returns:
-        list[int]: 升冪整數陣列。
     """
     if size < 1:
         return []
@@ -142,11 +127,12 @@ def binary_search_with_count(data, target=K, check_sorted=True):
 
 def average_time(func, repeat=5):
     """
-    計算函式平均執行時間。
+    使用 Python 標準庫 timeit.repeat() 計算平均執行時間。
 
-    Args:
-        func: 不需要參數的函式。
-        repeat: 重複執行次數。
+    注意：
+    - number=1 表示每次 timeit 只執行一次 func。
+    - repeat=5 表示重複量測 5 次。
+    - result 另外執行一次取得結果，不把輸出或資料建立算進搜尋時間。
 
     Returns:
         tuple[object, float]:
@@ -155,17 +141,15 @@ def average_time(func, repeat=5):
     if repeat < 1:
         raise ValueError("repeat must be >= 1")
 
-    result = None
-    total_time = 0.0
+    result = func()
 
-    for _ in range(repeat):
-        start = perf_counter()
-        result = func()
-        end = perf_counter()
+    records = timeit_module.repeat(
+        stmt=func,
+        repeat=repeat,
+        number=1,
+    )
 
-        total_time += end - start
-
-    average = total_time / repeat
+    average = sum(records) / len(records)
     return result, average
 
 
@@ -320,6 +304,7 @@ def build_radar_scores(results):
 def save_radar_chart(results, output_path="assets/radar.png"):
     """
     依照 benchmark 結果產生雷達圖。
+    matplotlib 延後 import，避免測試搜尋函式時因套件問題失敗。
     """
     import matplotlib
 
