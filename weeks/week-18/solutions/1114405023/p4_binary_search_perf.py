@@ -8,6 +8,7 @@
 - 比較 linear search 與 binary search 的比較次數與搜尋時間
 - 分別測 best、middle、worst、not_found 四種情境
 - 使用 Python 標準庫 timeit 量測搜尋時間
+- 輸出每個 case 中最快的搜尋法
 - 執行主程式時會自動產生 assets/radar.png
 """
 
@@ -132,11 +133,12 @@ def average_time(func, repeat=5):
     注意：
     - number=1 表示每次 timeit 只執行一次 func。
     - repeat=5 表示重複量測 5 次。
-    - result 另外執行一次取得結果，不把輸出或資料建立算進搜尋時間。
+    - result 另外執行一次取得搜尋結果。
+    - 不把資料建立、輸入、輸出算進搜尋時間。
 
     Returns:
         tuple[object, float]:
-        回傳最後一次執行結果，以及平均時間。
+        回傳搜尋結果與平均時間。
     """
     if repeat < 1:
         raise ValueError("repeat must be >= 1")
@@ -151,6 +153,20 @@ def average_time(func, repeat=5):
 
     average = sum(records) / len(records)
     return result, average
+
+
+def fastest_search(linear_time, binary_time):
+    """
+    比較 linear search 與 binary search 的平均執行時間，
+    回傳最快的搜尋法。
+    """
+    if linear_time < binary_time:
+        return "linear"
+
+    if binary_time < linear_time:
+        return "binary"
+
+    return "tie"
 
 
 def benchmark_search(data, target=K, repeat=5):
@@ -184,6 +200,7 @@ def benchmark_search(data, target=K, repeat=5):
         "binary_index": binary_index,
         "binary_comparisons": binary_comparisons,
         "binary_time": binary_time,
+        "fastest": fastest_search(linear_time, binary_time),
     }
 
 
@@ -231,6 +248,7 @@ def format_case_result(result):
         f"binary_index={result['binary_index']}",
         f"binary_comparisons={result['binary_comparisons']}",
         f"binary_time={result['binary_time']}",
+        f"fastest={result['fastest']}",
     ]
 
     return "\n".join(lines)
@@ -380,6 +398,7 @@ def solve(input_text):
             f"binary_index={result['binary_index']}",
             f"binary_comparisons={result['binary_comparisons']}",
             f"binary_time={result['binary_time']}",
+            f"fastest={result['fastest']}",
         ]
 
         return "\n".join(output_lines)
