@@ -105,3 +105,57 @@
 ---
 
 
+## 第四題後續討論與修改紀錄
+
+| 討論項目 | 決定 / 修改內容 |
+| --- | --- |
+| 是否要使用 `timeit`？ | 原本使用一般計時方式，後續改成 Python 標準庫 `timeit.repeat()`，讓第四題更符合題目要求的「用 timeit 比較」。 |
+| `timeit` 要量哪些東西？ | 只量搜尋函式本身，不把資料建立、輸入、輸出、雷達圖產生時間算進搜尋時間。 |
+| 是否要加入 found / not_found 彙整？ | 加入 found / not_found summary。found 使用 best、middle、worst 三種找到目標的 case 取平均；not_found 使用找不到目標的 case。 |
+| `cmp` 是什麼？ | `cmp` 代表 comparisons，也就是搜尋過程中的比較次數。 |
+| 是否要輸出較快者？ | 新增 `fastest` 欄位，比較 linear search 與 binary search 的 `timeit` 平均時間，輸出 `linear`、`binary` 或 `tie`。 |
+| best case 誰較快？ | best case 中 linear search 較快，因為目標 `K=123` 位於 index `0`，只需要比較 1 次。 |
+| middle / worst / not_found 誰較快？ | middle、worst、not_found 三種情況皆為 binary search 較快，因為 binary search 每次將搜尋範圍縮小一半。 |
+| 是否要更新 README？ | 需要在 README 補上 found / not_found summary、`cmp` 說明、`timeit` 說明與較快者欄位。 |
+| 是否要更新 TEST_LOG？ | 需要更新第四題輸出結果，包含 `fastest=linear` 或 `fastest=binary`。 |
+| 是否要更新測試檔？ | 建議在 `test_p4_binary_search_perf.py` 中補 `fastest_search()` 測試，確認 linear、binary、tie 三種結果都正確。 |
+
+---
+
+## 第四題 found / not_found 效能彙整
+
+根據第四題最新執行結果：
+
+| Case | Linear cmp | Binary cmp | Linear timeit | Binary timeit | 較快者 |
+| --- | ---: | ---: | ---: | ---: | --- |
+| found 平均 | 50000.67 | 16.33 | 0.0072284400 | 0.0000058667 | binary |
+| not_found | 100000 | 16 | 0.0135415800 | 0.0000065400 | binary |
+
+### found 平均計算方式
+
+found 平均是由 best、middle、worst 三個有找到目標的 case 計算平均值。
+
+```text
+linear_cmp_avg = (1 + 50001 + 100000) / 3 = 50000.67
+binary_cmp_avg = (16 + 16 + 17) / 3 = 16.33
+```
+
+```text
+linear_timeit_avg = (0.0000046200 + 0.0076549000 + 0.0140258000) / 3
+                  = 0.0072284400
+
+binary_timeit_avg = (0.0000071000 + 0.0000052400 + 0.0000052600) / 3
+                  = 0.0000058667
+```
+
+### not_found 結果
+
+not_found case 中，陣列長度為 `100000`，且不包含 `K = 123`。
+
+```text
+linear_cmp = 100000
+binary_cmp = 16
+linear_timeit = 0.0135415800
+binary_timeit = 0.0000065400
+fastest = binary
+```
